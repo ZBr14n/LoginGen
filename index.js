@@ -1,16 +1,20 @@
-const MongoClient = require('mongodb').MongoClient;
-const url = require('url');
+const path = require("path");
+const mongoose=require("mongoose");
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const express = require('express');
-const router=express.Router();
-
-const path = require('path');
+const app = express();
 
 const generatePassword = require('password-generator');
 const generateEmail = require('random-email');
 
-const app = express();
+//var url = process.env.MONGODB_URI;
+//var url="mongodb://br14n:Hello123@ds247827.mlab.com:47827/heroku_tj9btv1k";
+const PORT = process.env.PORT || 3001;
 
+
+
+app.use(bodyParser.json());
 
 
 // Serve static files from the React app
@@ -18,36 +22,20 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 
-
-
-router.get('/',function(req,res,next){ 
-  MongoClient.connect(process.env.MONGODB_URI,function(err,db){
-    if(err) throw err;
-    var dbo=db.db('heroku_tj9btv1k');
-
-    dbo.createCollection("id_table",function(err,res){
-      if(err) throw err;
-      db.close();
-    });
-    dbo.createCollection("status_table",function(err,res){
-      if(err) throw err;
-      db.close();
-    });
-
-
-
-    dbo.collection('UserInput').insertOne({
-      item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" }
-    }, function(err,res){
-      if(err) throw err;
-      console.log("# of docs inserted: " + res.insertedCount);
-      db.close();
-    });
-
-
-  });
+//encodeURI(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/", {
+  auth: {
+    user:'br14n',
+    password:'Hello123'
+  },
+  useNewUrlParser:true
+}, function(err, client) {
+  if (err) {
+    console.log(err);
+  }
+  console.log('connect!!!');
+  alert("it works!");
 });
-
 
 
 
@@ -109,15 +97,17 @@ app.get('*', (req, res) => {
 
 
 
-const port = process.env.PORT || 5000;
-app.listen(port);
+// const port = process.env.PORT || 5000;
+// app.listen(port);
 
-console.log(`Password generator listening on ${port}`);
-
-
+// console.log(`Password generator listening on ${port}`);
 
 
 
 
+
+app.listen(PORT,function(){
+  console.log(`app started on port ${PORT}`);
+});
 
 
