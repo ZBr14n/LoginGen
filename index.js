@@ -31,7 +31,7 @@ MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true } , functio
   if (err) throw err;
 
   var dbo = db.db("heroku_tj9btv1k");
-  dbo.createCollection("customers", function(err, res) {
+  dbo.createCollection("works after deploy!!!", function(err, res) {
   //  if (err) throw err;
     console.log("Collection created!");
     db.close();
