@@ -25,11 +25,13 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 
-const db;
-const passwords;
-const email2;
+let db=null;
+let passwords=null;
+let email2=null;
 MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true } , function(err, database) {
-  if (err) throw err;
+  if(err){
+    return console.log(err);
+  }
 
   db=database;
 
