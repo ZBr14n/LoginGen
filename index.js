@@ -1,15 +1,17 @@
 const path = require("path");
-const mongoose=require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
+const MongoClient = require('mongodb').MongoClient;
+//const mongoose=require('mongoose');
 
 const app = express();
 
 const generatePassword = require('password-generator');
 const generateEmail = require('random-email');
 
-//var url = process.env.MONGODB_URI;
-//var url="mongodb://br14n:Hello123@ds247827.mlab.com:47827/heroku_tj9btv1k";
+//const url = process.env.MONGODB_URI;
+//const url="mongodb://br14n:Hello123@ds247827.mlab.com:47827/heroku_tj9btv1k";
+//const url = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds247827.mlab.com:47827/heroku_tj9btv1k`;
 const PORT = process.env.PORT || 3001;
 
 
@@ -22,22 +24,41 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 
-//encodeURI(process.env.MONGODB_URI)
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/", {
-  auth: {
-    user:'br14n',
-    password:'Hello123'
-  },
-  useNewUrlParser:true
-}, function(err, client) {
-  if (err) {
-    console.log(err);
-  }
-  console.log('connect!!!');
-  alert("it works!");
-});
 
 
+
+MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true } , function(err, db) {
+  if (err) throw err;
+
+  var dbo = db.db("heroku_tj9btv1k");
+  dbo.createCollection("customers", function(err, res) {
+  //  if (err) throw err;
+    console.log("Collection created!");
+    db.close();
+  });
+}); 
+
+
+  
+
+  // dbo.createCollection("id_table",function(err,res){
+  //   if(err) throw err;
+  //   db.close();
+  // });
+  // dbo.createCollection("status_table",function(err,res){
+  //   if(err) throw err;
+  //   db.close();
+  // });
+
+
+
+  // dbo.collection('UserInput').insertOne({
+  //   item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" }
+  // }, function(err,res){
+  //   if(err) throw err;
+  //   console.log("# of docs inserted: " + res.insertedCount);
+  //   dbo.close();
+  // });
 
 
 
