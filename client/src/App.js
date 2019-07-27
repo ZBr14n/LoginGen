@@ -16,6 +16,7 @@ class App extends Component {
     this.getEmails_Passwords();
   }
 
+  
 
   getEmails_Passwords=()=>{
     fetch('/api/emails')
@@ -30,19 +31,19 @@ class App extends Component {
 
 
 
-  // upload_data=()=>{
-  //   fetch('/api/upload',{method:'POST'})
-  //     .then(response => {
-  //       if(response.ok){
-  //         console.log("click recorded");
-  //         return;
-  //       }
-  //       throw new Error("Request failed.");
-  //     })
-  //     .catch(function(error){
-  //       console.log(error);
-  //     });
-  // }
+  upload_data=()=>{
+    fetch('/api/upload',{method:'POST'})
+      .then(response => {
+        if(response.ok){
+          console.log("click recorded");
+          return;
+        }
+        throw new Error("Request failed.");
+      })
+      .catch(function(error){
+        console.log(error);
+      });
+  }
 
 
 

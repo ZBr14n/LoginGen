@@ -2,7 +2,6 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const MongoClient = require('mongodb').MongoClient;
-//const mongoose=require('mongoose');
 
 const app = express();
 
@@ -26,45 +25,21 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 
-
-MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true } , function(err, db) {
+const db;
+const passwords;
+const email2;
+MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true } , function(err, database) {
   if (err) throw err;
 
-  var dbo = db.db("heroku_tj9btv1k");
-  dbo.createCollection("works after deploy!!!", function(err, res) {
-  //  if (err) throw err;
-    console.log("Collection created!");
-    db.close();
-  });
+  db=database;
+
+  // var dbo = db.db("heroku_tj9btv1k");
+  // dbo.createCollection("works after deploy!!!", function(err, res) {
+  // //  if (err) throw err;
+  //   console.log("Collection created!");
+  //   db.close();
+  // });
 }); 
-
-
-  
-
-  // dbo.createCollection("id_table",function(err,res){
-  //   if(err) throw err;
-  //   db.close();
-  // });
-  // dbo.createCollection("status_table",function(err,res){
-  //   if(err) throw err;
-  //   db.close();
-  // });
-
-
-
-  // dbo.collection('UserInput').insertOne({
-  //   item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" }
-  // }, function(err,res){
-  //   if(err) throw err;
-  //   console.log("# of docs inserted: " + res.insertedCount);
-  //   dbo.close();
-  // });
-
-
-
-
-
-
 
 
 
@@ -73,7 +48,7 @@ app.get('/api/passwords', (req, res) => {
   const count = 5;
 
   // Generate some passwords
-  const passwords = Array.from(Array(count).keys()).map(i =>
+    passwords = Array.from(Array(count).keys()).map(i =>
     generatePassword(12, false)
   )
 
@@ -90,7 +65,7 @@ app.get('/api/emails',(req,res) => {
 
   
   //var email = generateEmail({domain: 'gmail.com'});
-  const email2 = Array.from(Array(5).keys()).map(i =>
+    email2 = Array.from(Array(5).keys()).map(i =>
     generateEmail({domain: 'gmail.com'})
   )
 
@@ -101,7 +76,19 @@ app.get('/api/emails',(req,res) => {
 });
 
 
+app.post('/api/upload',(req,res)=>{
 
+  var myobj = [
+    { _id: 154, name: 'Chocolate Heaven'},
+    { _id: 155, name: 'Tasty Lemon'},
+    { _id: 156, name: 'Vanilla Dream'}
+  ];
+  db.collection("UserInput").insertMany(myobj, function(err, res) {
+    if (err) throw err;
+    console.log(res);
+    db.close();
+  });
+})
 
 
 
@@ -132,3 +119,22 @@ app.listen(PORT,function(){
 });
 
 
+
+  // dbo.createCollection("id_table",function(err,res){
+  //   if(err) throw err;
+  //   db.close();
+  // });
+  // dbo.createCollection("status_table",function(err,res){
+  //   if(err) throw err;
+  //   db.close();
+  // });
+
+
+
+  // dbo.collection('UserInput').insertOne({
+  //   item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" }
+  // }, function(err,res){
+  //   if(err) throw err;
+  //   console.log("# of docs inserted: " + res.insertedCount);
+  //   dbo.close();
+  // });
