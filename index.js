@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3001;
 
 
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -80,16 +80,25 @@ app.get('/api/emails',(req,res) => {
 
 app.post('/api/upload',(req,res)=>{
 
-  var myobj = [
+  let myobj = [
     { _id: 154, name: 'Chocolate Heaven'},
     { _id: 155, name: 'Tasty Lemon'},
     { _id: 156, name: 'Vanilla Dream'}
   ];
-  db.collection("UserInput").insertMany(myobj, function(err, res) {
-    if (err) throw err;
-    console.log(res);
+
+  
+
+
+  db.collection("UserInput").insertMany(myobj, function(error, response) {
+    if (error){return res.status(500).send(error);}
+
+    console.log('this works!!!');
+
+    res.sendStatus(201);
     db.close();
   });
+
+  
 })
 
 
