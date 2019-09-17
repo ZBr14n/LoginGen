@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <style>
+      body{
+          text-align: center;
+      }
+  </style>
+
+  <meta charset="UTF-8">
+  <title>Database Logs</title>
+  
+  
+</head>
+<body>
+    
+    <h1>Emails: </h1>
+    <h2>
+        
+        <% mongod.forEach(function(foundData, i){ %>
+            <p> <%= foundData.emails %> </p>            
+        <%})%>
+
+    </h2>
+
+    <div class="separtor"></div>
+
+    <h1>Passwords: </h1>
+    <h2>
+        
+        <% mongod.forEach(function(foundData, i){ %>            
+            <p> <%= foundData.passwords %> </p>
+        <%})%>
+
+    </h2>
+
+
+</body>
+</html>
+
+

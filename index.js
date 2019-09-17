@@ -6,14 +6,8 @@ const MongoClient = require('mongodb').MongoClient;
 const app = express();
 
 const generatePassword = require('password-generator');
-const generateEmail = require('random-email');
 
-//const url = process.env.MONGODB_URI;
-//const url="mongodb://br14n:Hello123@ds247827.mlab.com:47827/heroku_tj9btv1k";
-//const url = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds247827.mlab.com:47827/heroku_tj9btv1k`;
-const PORT = process.env.PORT || 3001;
-
-
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,28 +15,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-
-
+//include EJS
+app.set('views',path.join(__dirname,'views'));
+app.set('view engine', 'ejs');
 
 
 let db=null;
 let passwords=null;
-let email2=null;
+let emails=null;
+
+
 MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true } , function(err, database) {
   if(err){
     return console.log(err);
   }
 
   db=database;
-
-  // var dbo = db.db("heroku_tj9btv1k");
-  // dbo.createCollection("works after deploy!!!", function(err, res) {
-  // //  if (err) throw err;
-  //   console.log("Collection created!");
-  //   db.close();
-  // });
 }); 
-
 
 
 // Put all API endpoints under '/api'
@@ -61,91 +50,70 @@ app.get('/api/passwords', (req, res) => {
 });
 
 
-
+function randString(){
+  let str="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let aux="";
+  for(let i=0; i < 9; i++){
+    aux+=str.charAt(Math.floor(Math.random()*63));    
+  }
+  return aux;
+}
 
 app.get('/api/emails',(req,res) => {
-
   
-  //var email = generateEmail({domain: 'gmail.com'});
-    email2 = Array.from(Array(5).keys()).map(i =>
-    generateEmail({domain: 'gmail.com'})
-  )
-
-  res.json(email2);
-  console.log(`${email2}`);
-  
-  
+  emails = Array.from(Array(5).keys()).map(i => randString());
+  res.json(emails);
+  console.log(`${emails}`);  
 });
 
 
 app.post('/api/upload',(req,res)=>{
-
+  //Keeping the db connection open otherwise it throws 'MongoError: server instance pool was destroyed'
   let myobj = [
-    { _id: 154, name: 'Chocolate Heaven'},
-    { _id: 155, name: 'Tasty Lemon'},
-    { _id: 156, name: 'Vanilla Dream'}
+    {emails},
+    {passwords}
   ];
 
-  
+  let dbo = db.db("heroku_tj9btv1k");
 
-
-  db.collection("UserInput").insertMany(myobj, function(error, response) {
-    if (error){return res.status(500).send(error);}
+  dbo.collection("UserInput").insertMany(myobj, (error, response) => {
+    if (error) {
+      return console.log(error);
+    }
 
     console.log('this works!!!');
 
     res.sendStatus(201);
-    db.close();
+    //db.close();             
   });
+});
 
+
+//http://localhost:5000/logs/retrieveData
+
+app.get('/logs/retrieveData',(req,res)=>{
   
-})
+  let dbo = db.db("heroku_tj9btv1k");
+  
+  dbo.collection('UserInput').find({}).toArray((err, result) => {
+    
+    if (err) return console.log(err);
+     
+     console.log(result);
+     //res.status(200).json({ result });
+     
+      res.render('retrieveData',{mongod: result});
+
+  });
+  //  res.send(JSON.stringify({ result }))    
+  
+});
 
 
-
-
-
-
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+// Any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
+app.listen(PORT,()=>{console.log(`App started listening on ${PORT}`)});
 
-
-
-// const port = process.env.PORT || 5000;
-// app.listen(port);
-
-// console.log(`Password generator listening on ${port}`);
-
-
-
-
-
-app.listen(PORT,function(){
-  console.log(`app started on port ${PORT}`);
-});
-
-
-
-  // dbo.createCollection("id_table",function(err,res){
-  //   if(err) throw err;
-  //   db.close();
-  // });
-  // dbo.createCollection("status_table",function(err,res){
-  //   if(err) throw err;
-  //   db.close();
-  // });
-
-
-
-  // dbo.collection('UserInput').insertOne({
-  //   item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" }
-  // }, function(err,res){
-  //   if(err) throw err;
-  //   console.log("# of docs inserted: " + res.insertedCount);
-  //   dbo.close();
-  // });

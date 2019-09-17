@@ -1,21 +1,48 @@
-.App {
+
+
+
+.App .EmailsPasswords{
+  text-align: center;
+  position: relative;
+  right: 25%;
+  /* font-family: "Courier New", monospace; */
+}
+
+
+.App .buttons{
   text-align: center;
   font-family: "Courier New", monospace;
   width: 100%;
+  position: relative;
+  top: 60px;
+
 }
 
-h1 {
-  font-weight: normal;
-  font-size: 42px;
+
+
+
+
+
+ul {
+  text-align: center;
+  font-size: 30px;
+  
+  position: relative;
+  left: 25%;
+
+  list-style-type: none;
+  margin: 0;
+  padding: 25px;
+  
+  display: inline-block;
+  *display: inline;
+  zoom: 1
 }
 
 
 
 
-
-
-
-
+/* styling the buttons below */
 .passwords {
   list-style: none;
   padding: 0;
