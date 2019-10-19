@@ -4,7 +4,7 @@
 
 This web app randomly generates numbers and letters as a string of 8 or 12 characters. The motivation behind this app is that
 I tend to sign up for online accounts (some of these accounts which I only use once and that's all); I don't like having to think about
-what the user name and password would be, so creating this app helps to ease the process.
+what the user name and password would be, so creating this app helps to ease the process. I also added a couple features for storing and retrieving this data to/from the database.
 
 
 # My Thoughts/What I learned:
