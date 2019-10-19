@@ -1,6 +1,6 @@
 # Login-Generator
 
-#What is this?
+# What is this?
 
 This web app randomly generates numbers and letters as a string of 8 or 12 characters. The motivation behind this app is that
 I tend to sign up for online accounts (some of these accounts which I only use once and that's all); I don't like having to think about
@@ -15,12 +15,12 @@ back and forth in learning HTML, CSS, and JavaScript/React.js/Node.js, I would s
 building all of this from scratch and following the MVC architecture model.
 
 
-#Credits
+# Credits
 
-MongoDB from MongoDB Inc.
-Node/Express.js framework from TJ Holowaychuk, StrongLoop and others
-React.js from Facebook
-Heroku for cloud deployments
+- MongoDB from MongoDB Inc.
+- Node/Express.js framework from TJ Holowaychuk, StrongLoop and others
+- React.js from Facebook
+- Heroku for cloud deployments
 
 
 # Author
