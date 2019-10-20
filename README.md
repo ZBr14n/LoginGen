@@ -1,5 +1,7 @@
 # Login-Generator
 
+https://frozen-mesa-12349.herokuapp.com/
+
 # What is this?
 
 This web app randomly generates numbers and letters as a string of 8 or 12 characters. The motivation behind this app is that
